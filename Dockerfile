@@ -2,12 +2,15 @@ FROM n8nio/n8n:latest
 
 USER root
 
-# Media işleme araçlarını ve Edge-TTS'i yüklüyoruz
-RUN apk add --no-cache ffmpeg python3 py3-pip && \
-    pip3 install edge-tts --break-system-packages
+# 1. Gerekli sistem paketlerini yüklüyoruz
+RUN apk add --no-cache ffmpeg python3 py3-pip
 
-# Klasör izinlerini yapılandırıyoruz
-RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node/.n8n
+# 2. Edge-TTS için izole bir Python sanal ortamı kuruyoruz
+RUN python3 -m venv /opt/venv && \
+    /opt/venv/bin/pip install --no-cache-dir edge-tts
 
-# Railway Volume izin hatasını (EACCES) önlemek için root yetkisiyle çalıştırıyoruz
+# 3. Edge-TTS ve FFmpeg'in sistem geneline erişilebilir olmasını sağlıyoruz
+ENV PATH="/opt/venv/bin:$PATH"
+
+# 4. Railway Volume izinlerini (EACCES) bypass etmek için root yetkisiyle çalıştırıyoruz
 USER root
