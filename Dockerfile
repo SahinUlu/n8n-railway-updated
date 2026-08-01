@@ -2,8 +2,13 @@ FROM n8nio/n8n:latest
 
 USER root
 
-# 1. Gerekli sistem paketlerini yüklüyoruz
-RUN apk add --no-cache ffmpeg python3 py3-pip
+# 1. Gerekli sistem paketlerini yükleyoruz (Debian tabanlı olduğu için apt-get kullanıyoruz)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    python3 \
+    python3-pip \
+    python3-venv \
+    && rm -rf /var/lib/apt/lists/*
 
 # 2. Edge-TTS için izole bir Python sanal ortamı kuruyoruz
 RUN python3 -m venv /opt/venv && \
