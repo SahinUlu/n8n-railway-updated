@@ -2,12 +2,13 @@ FROM n8nio/n8n:latest
 
 USER root
 
-# PIP sistem paket kısıtlamasını kaldırıyoruz
-ENV PIP_BREAK_SYSTEM_PACKAGES=1
+# 1. Debian paket yöneticisi (apt-get) ile FFmpeg ve Python yüklüyoruz
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ffmpeg python3 python3-pip && \
+    rm -rf /var/lib/apt/lists/*
 
-# Gereksinimleri yüklüyoruz
-RUN apk add --no-cache ffmpeg python3 py3-pip && \
-    pip3 install --no-cache-dir edge-tts
+# 2. Edge-TTS kütüphanesini yüklüyoruz
+RUN pip3 install --no-cache-dir --break-system-packages edge-tts
 
-# Volume izin sorunlarını aşmak için root ile başlatıyoruz
+# 3. Railway Volume izin hatasını (EACCES) önlemek için root olarak çalıştırıyoruz
 USER root
