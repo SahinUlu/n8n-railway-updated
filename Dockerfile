@@ -16,6 +16,6 @@ RUN python3 -m venv /opt/venv && \
     /opt/venv/bin/pip install --no-cache-dir edge-tts youtube-transcript-api
 
 ENV PATH="/opt/venv/bin:$PATH"
-
+COPY cookies.txt /tmp/cookies.txt
 # Railway Volume izinlerini (EACCES) bypass etmek için root yetkisiyle çalıştırıyoruz
 USER root
