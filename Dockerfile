@@ -13,7 +13,7 @@ USER root
 RUN apk add --no-cache ffmpeg python3 py3-pip py3-virtualenv
 
 RUN python3 -m venv /opt/venv && \
-    /opt/venv/bin/pip install --no-cache-dir edge-tts
+    /opt/venv/bin/pip install --no-cache-dir edge-tts youtube-transcript-api
 
 ENV PATH="/opt/venv/bin:$PATH"
 
